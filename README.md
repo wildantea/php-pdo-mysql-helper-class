@@ -127,7 +127,6 @@ DELETE
 $db->delete('admin','id_user',1);
 ```
 
-Developed By
-============
-
+#### Developed By
+----------------
  * wildantea - <wildannudin@gmail.com>
