@@ -12,12 +12,15 @@ class Database {
     
     public function __construct()
     {
-        try {
-        $this->pdo = new PDO(DB_DSN, DB_USERNAME, DB_PASSWORD );
-        $this->pdo->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
-        }
-        catch( PDOException $e ) {
-            echo "error ". $e->getMessage();
+        try
+        {
+            $this->pdo = new PDO(DB_DSN, DB_USERNAME, DB_PASSWORD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES '" . DB_CHARACSET . "';"));
+            $this->pdo->exec("SET CHARACTER SET " . DB_CHARACSET);
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->pdo->query("set names " . DB_CHARACSET);
+        } catch (PDOException $e)
+        {
+            echo "error " . $e->getMessage();
         }
     }
 
@@ -40,6 +43,36 @@ class Database {
         $sel->setFetchMode( PDO::FETCH_OBJ );
         return $sel;
     }
+
+
+    /**
+     * begin a transaction.
+     */
+    public function begin_transaction()
+    {
+        $this->pdo->setAttribute(PDO::ATTR_AUTOCOMMIT, 0);
+        $this->pdo->beginTransaction();
+    }
+
+    /**
+     * commit the transaction.
+     */
+    public function commit()
+    {
+        $this->pdo->commit();
+        $this->pdo->setAttribute(PDO::ATTR_AUTOCOMMIT, 1);
+    }
+
+    /**
+     * rollback the transaction.
+     */
+    public function rollback()
+    {
+        $this->pdo->rollBack();
+        $this->pdo->setAttribute(PDO::ATTR_AUTOCOMMIT, 1);
+    }
+
+
 
     /**
     * fetch only one row 
