@@ -2,6 +2,11 @@ PHP pdo mysql helper class
 ==========================
 
 
+I add some codes to supports transaction.
+
+roydu
+2014-04-18
+
 
 Usage
 =====
