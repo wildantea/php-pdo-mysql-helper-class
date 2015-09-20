@@ -20,7 +20,7 @@ SELECT
 ```
 //this will get all records with username wildan
 $data=array('username'=>'wildan');
-$custom=$db->fetch_custom("select * from admin where username=?",$data);
+$custom=$db->custom_query("select * from admin where username=?",$data);
 	foreach ($custom as $key) {
 		echo $key->username; //print username column
 	}
@@ -29,7 +29,7 @@ $custom=$db->fetch_custom("select * from admin where username=?",$data);
 ```
 //get all record from 2 tables with join
 $qr="select admin.*,level.* from admin inner join level on admin.level=level.id_level";
-$cust=$db->fetch_custom($qr);
+$cust=$db->custom_query($qr);
 	foreach ($cust as $key) {
 		echo $key->username.":".$key->name_level; 
 	}
@@ -38,7 +38,7 @@ $cust=$db->fetch_custom($qr);
 ```	
 //get all record with condition (admin.level=2)
 $qr="select admin.*,level.* from admin inner join level on admin.level=level.id_level and admin.level=?";
-$cust=$db->fetch_custom($qr,array('admin.level'=>2));
+$cust=$db->custom_query($qr,array('admin.level'=>2));
 	foreach ($cust as $key) {
 		echo $key->username.":".$key->name_level; //print username column and levelname
 	}
@@ -131,6 +131,34 @@ DELETE
 //delete from admin where id_user=1
 $db->delete('admin','id_user',1);
 ```
+
+```
+COMPLEX QUERY
+------
+```
+
+//if you have complex query, you can use custom_query. You can use custom query as complex as u want, and also absolutely with prepared statement for security reason. below is the sample how to use custom query.
+
+//fetch data
+$data = array('id'=>1,'level'=>1);
+$db->custom_query("select * from admin where id=? and level=?");
+
+//insert data, 
+$data=array('username'=>'admin',
+	'password'=>md5('admin'),
+	'level'=>1);
+$db->custom_query("insert into admin (username,password) values(?,?)",$data);
+
+
+//custom query update data, 
+$data=array('username'=>'wildan',
+	'level'=>2,
+	'id'=>1);
+$db->custom_query("update admin set username=?,level=? where id=?",$data);
+
+//delete data 
+$data=array('id'=>1);
+$db->custom_query("delete from admin where id=?",$data);
 
 #### Developed By
 ----------------

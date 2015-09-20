@@ -25,12 +25,12 @@ class Database {
     }
 
     /**
-    * custom query , joining multiple table, aritmathic etc
+    * custom query ,update,delete,insert,or fetch, joining multiple table etc, aritmathic etc
     * @param  string $sql  custom query
     * @param  array $data associative array 
     * @return array  recordset 
     */
-    public function fetch_custom( $sql,$data=null) {
+    public function custom_query( $sql,$data=null) {
         if ($data!==null) {
         $dat=array_values($data);
         }
