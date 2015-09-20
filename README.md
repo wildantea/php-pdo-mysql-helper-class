@@ -135,7 +135,6 @@ $db->delete('admin','id_user',1);
 ```
 COMPLEX QUERY
 ------
-```
 
 //if you have complex query, you can use custom_query. You can use custom query as complex as u want, and also absolutely with prepared statement for security reason. below is the sample how to use custom query.
 
