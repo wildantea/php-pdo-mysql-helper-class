@@ -160,6 +160,8 @@ $db->custom_query("update admin set username=?,level=? where id=?",$data);
 $data=array('id'=>1);
 $db->custom_query("delete from admin where id=?",$data);
 
+```
+
 #### Developed By
 ----------------
  * wildantea - <wildannudin@gmail.com>
