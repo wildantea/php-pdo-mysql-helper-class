@@ -1,4 +1,4 @@
-PHP pdo mysql helper class  
+PHP pdo mysql helper class
 ==========================
 
 
@@ -10,7 +10,7 @@ roydu
 
 Usage
 =====
-	Make sure you've change the configuration file config.php. 
+	Make sure you've change the configuration file config.php.
 	Include config.php to your php code
 
 SELECT
@@ -31,11 +31,11 @@ $custom=$db->custom_query("select * from admin where username=?",$data);
 $qr="select admin.*,level.* from admin inner join level on admin.level=level.id_level";
 $cust=$db->custom_query($qr);
 	foreach ($cust as $key) {
-		echo $key->username.":".$key->name_level; 
+		echo $key->username.":".$key->name_level;
 	}
 ```
 **join 2 tables with condition**
-```	
+```
 //get all record with condition (admin.level=2)
 $qr="select admin.*,level.* from admin inner join level on admin.level=level.id_level and admin.level=?";
 $cust=$db->custom_query($qr,array('admin.level'=>2));
@@ -78,7 +78,7 @@ foreach ($row as $key) {
 ```
 //select username,password where username='$username' and password='$password'
 //return true if exist
-//case login system 
+//case login system
 $data=array(
 	'username'=>$_POST['username'],
 	'password'=>md5($_POST['password'])
@@ -93,7 +93,7 @@ if ($s==true) {
 **Search Record**
 ```
 1. search one cond
-//search data 
+//search data
 //select username,password from admin where username like %wild%
 $find=$db->search('admin',array('username','password'),array('username'=>'wild'));
 foreach ($find as $key) {
@@ -116,7 +116,19 @@ $data=array('username'=>'admin',
 $db->insert('admin',$data);
 
 ```
-UPDATE 
+GET LAST INSERT ID
+------
+```
+//equal to insert into admin (username,password,level) values('admin',md5('admin'),1)
+$data=array('username'=>'admin',
+	'password'=>md5('admin'),
+	'level'=>1);
+$db->insert('admin',$data);
+$last_id = $db->get_last_id(); //this will get the last insert id from admin table
+
+```
+
+UPDATE
 ------
 ```
 //equal to update admin set username='wildan',level=1 where id_user=1
@@ -142,20 +154,20 @@ COMPLEX QUERY
 $data = array('id'=>1,'level'=>1);
 $db->custom_query("select * from admin where id=? and level=?");
 
-//insert data, 
+//insert data,
 $data=array('username'=>'admin',
 	'password'=>md5('admin'),
 	'level'=>1);
 $db->custom_query("insert into admin (username,password) values(?,?)",$data);
 
 
-//custom query update data, 
+//custom query update data,
 $data=array('username'=>'wildan',
 	'level'=>2,
 	'id'=>1);
 $db->custom_query("update admin set username=?,level=? where id=?",$data);
 
-//delete data 
+//delete data
 $data=array('id'=>1);
 $db->custom_query("delete from admin where id=?",$data);
 
