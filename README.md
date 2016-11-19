@@ -74,6 +74,14 @@ foreach ($row as $key) {
 	echo $key->username."<br>";
 }
 ```
+**Retrieving A List Of Column Values with condition and order (ASC|DESC)**
+```
+//select username,password where level=1 order by id ASC|DESC'
+$row=$db->fetch_multi_row_oder('admin',array('username','password'),array('level'=>1),'id','ASC');
+foreach ($row as $key) {
+	echo $key->username."<br>";
+}
+```
 **CHECK EXIST**
 ```
 //select username,password where username='$username' and password='$password'

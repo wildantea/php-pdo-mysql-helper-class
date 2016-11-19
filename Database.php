@@ -153,6 +153,40 @@ class Database {
     }
 
     /**
+    * fetch row with condition
+    * @param  string order ASC or DESC
+    * @param  string $index based on which column
+    * @param  string $table table name
+    * @param  array $col which columns name would be select
+    * @param  array $where what column will be the condition
+    * @return array recordset
+    */
+    public function fetch_multi_row_order($table,$col,$where,$order,$index)
+    {
+
+        $data = array_values( $where );
+        //grab keys
+        $cols=array_keys($where);
+        $colum=implode(', ', $col);
+        foreach ($cols as $key) {
+          $keys=$key."=?";
+          $mark[]=$keys;
+        }
+
+        $jum=count($where);
+        if ($jum>1) {
+            $im=implode('? and  ', $mark);
+             $sel = $this->pdo->prepare("SELECT $colum from $table WHERE $im ORDER BY $index $order");
+        } else {
+          $im=implode('', $mark);
+             $sel = $this->pdo->prepare("SELECT $colum from $table WHERE $im ORDER BY $index $order");
+        }
+        $sel->execute( $data );
+        $sel->setFetchMode( PDO::FETCH_OBJ );
+        return  $sel;
+    }
+
+    /**
     * check if there is exist data
     * @param  string $table table name
     * @param  array $dat array list of data to find
