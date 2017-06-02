@@ -141,7 +141,7 @@ class Database {
 
         $jum=count($where);
         if ($jum>1) {
-            $im=implode('? and  ', $mark);
+             $im=implode(' and ', $mark);
              $sel = $this->pdo->prepare("SELECT $colum from $table WHERE $im");
         } else {
           $im=implode('', $mark);
