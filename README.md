@@ -20,7 +20,7 @@ SELECT
 ```
 //this will get all records with username wildan
 $data=array('username'=>'wildan');
-$custom=$db->custom_query("select * from admin where username=?",$data);
+$custom=$db->query("select * from admin where username=?",$data);
 	foreach ($custom as $key) {
 		echo $key->username; //print username column
 	}
@@ -29,7 +29,7 @@ $custom=$db->custom_query("select * from admin where username=?",$data);
 ```
 //get all record from 2 tables with join
 $qr="select admin.*,level.* from admin inner join level on admin.level=level.id_level";
-$cust=$db->custom_query($qr);
+$cust=$db->query($qr);
 	foreach ($cust as $key) {
 		echo $key->username.":".$key->name_level;
 	}
@@ -38,7 +38,7 @@ $cust=$db->custom_query($qr);
 ```
 //get all record with condition (admin.level=2)
 $qr="select admin.*,level.* from admin inner join level on admin.level=level.id_level and admin.level=?";
-$cust=$db->custom_query($qr,array('admin.level'=>2));
+$cust=$db->query($qr,array('admin.level'=>2));
 	foreach ($cust as $key) {
 		echo $key->username.":".$key->name_level; //print username column and levelname
 	}
@@ -46,7 +46,7 @@ $cust=$db->custom_query($qr,array('admin.level'=>2));
 **Retrieving All Rows From A Table**
 ```
 //equal to select * from admin
-$rs=$db->fetch_all('admin');
+$rs=$db->fetchAll('admin');
 	foreach ($rs as $key) {
 		echo $key->username.":".$key->password."<br>";
 	}
@@ -55,32 +55,8 @@ $rs=$db->fetch_all('admin');
 ```
 //only return one row
 //select * from admin where id_user=4
-$rs=$db->fetch_single_row('admin','id_user',4);
+$rs=$db->fetchSingleRow('admin','id_user',4);
 	echo $rs->username;
-```
-**Retrieving A List Of Column Values**
-```
-//select username,password from admin
-$f=$db->fetch_col('admin',array('username','password'));
-foreach ($f as $key) {
-	echo $key->username.$key->password."<br>";
-}
-```
-**Retrieving A List Of Column Values with condition**
-```
-//select username,password where level=1'
-$row=$db->fetch_multi_row('admin',array('username','password'),array('level'=>1));
-foreach ($row as $key) {
-	echo $key->username."<br>";
-}
-```
-**Retrieving A List Of Column Values with condition and order (ASC|DESC)**
-```
-//select username,password where level=1 order by id ASC|DESC'
-$row=$db->fetch_multi_row_oder('admin',array('username','password'),array('level'=>1),'id','ASC');
-foreach ($row as $key) {
-	echo $key->username."<br>";
-}
 ```
 **CHECK EXIST**
 ```
@@ -91,7 +67,7 @@ $data=array(
 	'username'=>$_POST['username'],
 	'password'=>md5($_POST['password'])
 			);
-$s=$db->check_exist('admin',$data);
+$s=$db->checkExist('admin',$data);
 if ($s==true) {
 	echo "good";
 } else {
@@ -124,6 +100,20 @@ $data=array('username'=>'admin',
 $db->insert('admin',$data);
 
 ```
+INSERT Multipe array in one query
+------
+```
+//insert multiple array data with single query
+$level = array('Operator',"Front Staff");
+foreach ($level as $lv) {
+	$array_data[] = array(
+		'name_level' => $lv
+	);
+}
+$db->insertMulti('level',$array_data);
+
+
+```
 GET LAST INSERT ID
 ------
 ```
@@ -132,7 +122,7 @@ $data=array('username'=>'admin',
 	'password'=>md5('admin'),
 	'level'=>1);
 $db->insert('admin',$data);
-$last_id = $db->get_last_id(); //this will get the last insert id from admin table
+$last_id = $db->getLastInsertId(); //this will get the last insert id from admin table
 
 ```
 
@@ -156,28 +146,28 @@ $db->delete('admin','id_user',1);
 COMPLEX QUERY
 ------
 ```
-//if you have complex query, you can use custom_query. You can use custom query as complex as u want, and also absolutely with prepared statement for security reason. below is the sample how to use custom query.
+//if you have complex query, you can use query. You can use custom query as complex as u want, and also absolutely with prepared statement for security reason. below is the sample how to use custom query.
 
 //fetch data
 $data = array('id'=>1,'level'=>1);
-$db->custom_query("select * from admin where id=? and level=?");
+$db->query("select * from admin where id=? and level=?",$data);
 
 //insert data,
 $data=array('username'=>'admin',
 	'password'=>md5('admin'),
 	'level'=>1);
-$db->custom_query("insert into admin (username,password) values(?,?)",$data);
+$db->query("insert into admin (username,password) values(?,?)",$data);
 
 
 //custom query update data,
 $data=array('username'=>'wildan',
 	'level'=>2,
 	'id'=>1);
-$db->custom_query("update admin set username=?,level=? where id=?",$data);
+$db->query("update admin set username=?,level=? where id=?",$data);
 
 //delete data
 $data=array('id'=>1);
-$db->custom_query("delete from admin where id=?",$data);
+$db->query("delete from admin where id=?",$data);
 
 ```
 
